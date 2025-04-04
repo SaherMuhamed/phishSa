@@ -24,7 +24,7 @@ Designed for:
 
 Includes ethical safeguards like automatic cleanup and prominent usage warnings.
 
-## 🔥 Features
+## Features
 - **One-Click Evil Twin** - Automates fake AP creation with configurable SSID
 - **Credential Harvesting** - Captures WiFi passwords via phishing portal
 - **Bootstrap 5 UI** - Professional-looking responsive login page
@@ -32,7 +32,10 @@ Includes ethical safeguards like automatic cleanup and prominent usage warnings.
 - **Auto-Configuration** - Sets up dnsmasq, hostapd, and iptables automatically
 - **Stealth Mode** - Minimal footprint with automatic cleanup
 
-  ## ⚙️ Installation
+## Screenshot
+![](https://github.com/SaherMuhamed/phishSa/blob/main/screenshots/Screenshot%202025-03-29%20145225.png)
+
+  ## Installation
 ```bash
 # Clone repository
 
@@ -43,7 +46,7 @@ cd phishSa
 sudo apt update && sudo apt install -y hostapd dnsmasq lighttpd
 ```
 
-## 🚀 Usage
+## Usage
 ```bash
 sudo python3 phishSa.py --ssid Saher_Wi-Fi --channel 7 --interface wlan0
 ```
@@ -55,7 +58,7 @@ sudo python3 phishSa.py --ssid Saher_Wi-Fi --channel 7 --interface wlan0
 -i, --interface  Wireless interface to use
 ```
 
-## 🛡️ Ethical Notice
+## Ethical Notice
 ⚠️ This tool is for **authorized security testing and educational purposes only**.
 ❗ Never use against networks **you don't own or have permission** to test.
 
