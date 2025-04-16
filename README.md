@@ -17,10 +17,10 @@ Designed for:
 
 **Key Technical Components:**
 - Python-based control system
-- dnsmasq for DHCP/DNS spoofing
-- hostapd for AP management
-- iptables for traffic redirection
-- Lighttpd web server for captive portal
+- 'dnsmasq' for DHCP/DNS spoofing
+- 'hostapd' for AP management
+- 'iptables' for traffic redirection
+- 'Lighttpd' web server for captive portal
 
 Includes ethical safeguards like automatic cleanup and prominent usage warnings.
 
