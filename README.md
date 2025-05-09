@@ -6,7 +6,6 @@
 ## 🔍 Overview
 > phishSa is an advanced dashboard for monitoring and managing WiFi penetration testing operations. It provides real-time visualization of connected clients, captured credentials, and attack analytics with an intuitive web interface.
 
-
 Designed for:
 - Security researchers testing WPA/WPA2-PSK and WPA2 Enterprise setups
 - Red teams conducting physical security assessments
@@ -53,12 +52,35 @@ cd phishSa
 
 # Install dependencies
 sudo apt update && sudo apt install -y hostapd dnsmasq lighttpd
-```
 
+# Install required packages for python
+pip install -r requirements.txt
+```
 ## Usage
 ```bash
 sudo python3 phishSa.py --ssid Saher_Wi-Fi --channel 7 --interface wlan0
 ```
+
+## Screenshots
+##### Terminal CLI look
+![](https://github.com/SaherMuhamed/phishSa/blob/main/screenshots/Screenshot%202025-05-09%20185258.png)
+
+##### Terminal CLI look (with detailed output)
+![](https://github.com/SaherMuhamed/phishSa/blob/main/screenshots/Screenshot%202025-05-09%20185s612.png)
+
+##### Web interface dashboard (light mode)
+![](https://github.com/SaherMuhamed/phishSa/blob/main/screenshots/Screenshot%202025-05-09%20185336.png)
+
+##### Web interface dashboard (dark mode) with captured cerdentials
+![](https://github.com/SaherMuhamed/phishSa/blob/main/screenshots/Screenshot%202025-05-09%20185441.png)
+
+##### Phishing page from an android mobile after connected to the fake AP
+![](https://github.com/SaherMuhamed/phishSa/blob/main/screenshots/phone-1.jpg)
+
+##### Phishing page from an android mobile after connected to the fake AP and enter credentials
+![](https://github.com/SaherMuhamed/phishSa/blob/main/screenshots/phone-2.jpg)
+
+> Note: You can modify the `index.html` file and comment the username input field if you target WPA2-PSK (personal home wireless network) not a captive portal
 
 ### Options:
 ```bash
