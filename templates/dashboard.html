@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>phishSa | Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
+    <!-- Bootstrap 5.3 CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- ApexCharts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Add to your existing style section */
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container-fluid {
+            flex: 1 0 auto;
+        }
+
+        .footer {
+            flex-shrink: 0;
+            width: 100%;
+            backdrop-filter: blur(5px); /* Adds a nice frosted glass effect */
+            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+        }
+
+        /* Dark mode footer adjustment */
+        body.dark-mode .footer {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black for dark mode */
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .footer a {
+            color: #f8f9fa;
+        }
+        .card {
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .scrollable-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .form-switch .form-check-input {
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .badge {
+            padding: 0.35em 0.65em;
+            font-size: 0.8rem;
+            border-radius: 0.5rem;
+        }
+        .card-header {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        .btn-sm {
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary mb-4 shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="bi bi-router-fill fs-3 me-2"></i>
+                <div>
+                    <span class="fw-bold">phishSa - <span class="fw-medium fs-6"><i>by SaherMuhamed</i></span></span>
+                    <small class="d-block text-white-50 fs-6 letter-spacing">Evil Twin Attack Framework</small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item mx-2" data-bs-toggle="tooltip" data-bs-title="Uptime that the captive portal running">
+                        <span class="nav-link d-flex align-items-center py-2">
+                            <i class="bi bi-activity fs-5 me-2"></i>
+                            <div>
+                                <small class="d-block text-white-50">Uptime</small>
+                                <span class="fw-medium" id="uptime">00:00:00</span>
+                            </div>
+                        </span>
+                    </li>
+                    
+                    <li class="nav-item mx-2" data-bs-toggle="tooltip" data-bs-title="Your current time now based on your zone">
+                        <span class="nav-link d-flex align-items-center py-2">
+                            <i class="bi bi-clock fs-5 me-2"></i>
+                            <div>
+                                <small class="d-block text-white-50">Current Time</small>
+                                <span class="fw-medium" id="current-time">Loading...</span>
+                            </div>
+                        </span>
+                    </li>
+                    
+                    <li class="nav-item dropdown mx-2">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center py-2" href="#" id="actionsDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-gear-fill fs-5 me-2"></i>
+                            <span>Actions</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <!-- Export Section -->
+                            <li><h6 class="dropdown-header">Export Options</h6></li>
+                            <li><a class="dropdown-item d-flex align-items-center" href="#" id="exportCredentials"><i class="bi bi-file-earmark-arrow-down me-2"></i>Export Credentials</a></li>
+                            <li><a class="dropdown-item d-flex align-items-center" href="#" id="exportLogs"><i class="bi bi-file-earmark-text me-2"></i>Export Logs</a></li>
+                            
+                            <!-- Danger Zone Section -->
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header text-danger">Danger Zone</h6></li>
+                            <li><a class="dropdown-item d-flex align-items-center text-danger" href="#" id="clearCredentials">
+                                <i class="bi bi-trash me-2"></i>
+                                <span>Clear Credentials</span>
+                                <small class="text-muted ms-auto">Irreversible</small>
+                            </a></li>
+                            <li><a class="dropdown-item d-flex align-items-center text-danger" href="#" id="clearLogs">
+                                <i class="bi bi-journal-x me-2"></i>
+                                <span>Clear Logs</span>
+                                <small class="text-muted ms-auto">Irreversible</small>
+                            </a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item mx-2">
+                        <div class="form-check form-switch d-flex align-items-center">
+                            <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                            <label class="form-check-label ms-2 text-white" for="darkModeToggle" data-bs-toggle="tooltip" data-bs-title="Enable dark mode for the dashboard">
+                                <i class="bi bi-moon-stars-fill fs-5"></i>
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Stats Overview -->
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-md-6 col-lg-12">
+                        <div class="card stat-card fade-in">
+                            <div class="stat-value text-primary fs-3" id="client-count">0</div>
+                            <div class="stat-label small">Connected Clients</div>
+                            <div class="mt-2">
+                                <small class="text-muted"><i class="bi bi-arrow-up-circle-fill text-success"></i> <span id="client-trend">0</span> in last 5 min</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-12">
+                        <div class="card stat-card fade-in">
+                            <div class="stat-value text-danger fs-3" id="credential-count">0</div>
+                            <div class="stat-label small">Captured Credentials</div>
+                            <div class="mt-2">
+                                <small class="text-muted"><i class="bi bi-arrow-up-circle-fill text-success"></i> <span id="credential-trend">0</span> in last 5 min</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card fade-in">
+                    <div class="card-header text-white d-flex align-items-center py-2">
+                        <i class="bi bi-router me-2 fs-5"></i>
+                        <span class="fs-6 fw-medium">AP Information</span>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small fw-semibold">SSID:</span>
+                                <span id="current-ssid" class="badge bg-primary small">N/A</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small fw-semibold">Channel:</span>
+                                <span id="current-channel" class="badge bg-info text-dark small">N/A</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small fw-semibold">Interface:</span>
+                                <span id="current-interface" class="badge bg-secondary small">N/A</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small fw-semibold">Status:</span>
+                                <span class="badge badge-online text-white small" id="ap-status">Running</span>
+                            </div>
+                        </div>
+                        <div class="mt-3" style="height: 170px;">
+                            <div class="chart-container">
+                                <div id="trafficChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-lg-9">
+                <div class="row">
+                    <!-- Connected Clients -->
+                    <div class="col-md-7">
+                        <div class="card fade-in">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-laptop-fill me-2 fs-5"></i>
+                                    <span class="fs-6 fw-medium">Connected Clients</span>
+                                </div>
+                                <div>
+                                    <span class="badge bg-light text-dark me-2 fs-6" id="live-client-count">0</span>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-light dropdown-toggle px-2" type="button" data-bs-toggle="dropdown">
+                                            <i class="bi bi-filter fs-6"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item active small" href="#" data-filter="all">All Devices</a></li>
+                                            <li><a class="dropdown-item small" href="#" data-filter="excellent">Excellent Signal</a></li>
+                                            <li><a class="dropdown-item small" href="#" data-filter="good">Good Signal</a></li>
+                                            <li><a class="dropdown-item small" href="#" data-filter="fair">Fair Signal</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body scrollable-container" id="clients-container">
+                                <p class="text-muted text-center py-4 small">No clients connected</p>
+                            </div>
+                            <div class="card-footer bg-transparent d-flex justify-content-between py-2">
+                                <small class="text-muted text-small">Last updated: <span id="clients-updated">Just now</span></small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Captured Credentials -->
+                    <div class="col-md-5">
+                        <div class="card fade-in">
+                            <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center py-2">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-key-fill me-2 fs-5"></i>
+                                    <span class="fs-6 fw-medium">Captured Credentials</span>
+                                </div>
+                                <div>
+                                    <span class="badge bg-light text-dark me-2 fs-6" id="live-credential-count">0</span>
+                                    <button class="btn btn-sm btn-light px-2" id="toggle-password">
+                                        <i class="bi bi-eye-fill fs-6"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body scrollable-container" id="credentials-container">
+                                <p class="text-muted text-center py-4 small">No credentials captured</p>
+                            </div>
+                            <div class="card-footer bg-transparent d-flex justify-content-between py-2">
+                                <small class="text-muted text-small">Last capture: <span id="last-capture">Never</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Log and Charts -->
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card fade-in">
+                            <div class="card-header bg-warning text-dark d-flex align-items-center py-2">
+                                <i class="bi bi-list-check me-2 fs-5"></i>
+                                <span class="fs-6 fw-medium">Activity Log</span>
+                            </div>
+                            <div class="card-body p-0">
+                                <div id="activity-log">
+                                    <p class="text-muted p-4 text-center small">Waiting for activity...</p>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent d-flex justify-content-between py-2">
+                                <small class="text-muted fs-6">Total entries: <span id="log-count">0</span></small>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-danger px-2" id="clear-log">
+                                        <i class="bi bi-trash fs-6"></i> Delete Logs 
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card fade-in">
+                            <div class="card-header bg-success text-white d-flex align-items-center py-2">
+                                <i class="bi bi-graph-up-arrow me-2 fs-5"></i>
+                                <span class="fs-6 fw-medium">Activity Analytics</span>
+                            </div>
+                            <div class="card-body p-2">
+                                <div class="chart-container">
+                                    <div id="activityChart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="exportModalTitle">Export Data</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="exportFormat" class="form-label fw-semibold">Export Format</label>
+                            <select class="form-select" id="exportFormat">
+                                <option value="json">JSON (.json)</option>
+                                <option value="csv">CSV (.csv)</option>
+                                <option value="xml" class="credential-only">XML (.xml)</option>
+                            </select>
+                        </div>
+                        <div class="alert alert-info small p-2">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <span id="format-description">JSON format provides structured data</span>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label fw-semibold">Content Preview</label>
+                                <button id="copyExportContent" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-clipboard"></i> Copy
+                                </button>
+                            </div>
+                            <textarea class="form-control font-monospace small" id="exportContent" rows="12" readonly
+                                style="font-size: 0.8rem; white-space: pre;"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i> Close
+                </button>
+                <button type="button" class="btn btn-primary" id="downloadExport">
+                    <i class="bi bi-download me-1"></i> Download
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Add this to your JavaScript to handle the new modal features
+document.getElementById('exportFormat').addEventListener('change', function() {
+    const descriptions = {
+        'json': 'Structured data format suitable for applications',
+        'csv': 'Comma-separated values for spreadsheet import',
+        'xml': 'Structured markup format for data exchange',
+    };
+    document.getElementById('format-description').textContent = descriptions[this.value];
+});
+
+document.getElementById('copyExportContent').addEventListener('click', function() {
+    const content = document.getElementById('exportContent');
+    content.select();
+    document.execCommand('copy');
+    showToast('Content copied to clipboard!');
+});
+
+// Show/hide format options based on export type
+function updateExportFormatOptions(type) {
+    document.querySelectorAll('.credential-only').forEach(el => {
+        el.style.display = type === 'credentials' ? 'block' : 'none';
+    });
+    document.querySelectorAll('.log-only').forEach(el => {
+        el.style.display = type === 'logs' ? 'block' : 'none';
+    });
+}
+</script>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalTitle">Confirm Action</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmModalBody">
+                    Are you sure you want to perform this action?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmAction">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-transparent">
+        <div class="container-fluid text-center">
+            <small class="text-muted">
+                phishSa Dashboard v1.0 By &copy; SaherMuhamed
+                <span class="mx-2">•</span>
+                <i class="bi bi-github me-1"></i>
+                <a href="https://github.com/SaherMuhamed/phishSa" class="text-muted text-decoration-none" target="_blank">GitHub</a>
+                <span class="mx-2">•</span>
+                <i class="bi bi-bug me-1"></i>
+                <a href="https://github.com/SaherMuhamed/phishSa/issues" class="text-muted text-decoration-none">Report Issue</a>
+            </small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Socket.IO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    
+</body>
+</html>

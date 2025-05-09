@@ -1,0 +1,85 @@
+.btn-baby-blue {
+    background-color: #3ca2fa;
+    border-color: #3ca2fa;
+    color: white;
+    transition: all 0.2s ease;
+}
+.btn-baby-blue:hover {
+    background-color: #6fc4e7;
+    border-color: #6fc4e7;
+    color: white;
+    transform: translateY(-1px);
+}
+.btn-baby-blue:active {
+    transform: translateY(0);
+}
+.text-purple {
+    color: #3ca2fa !important;
+}
+.password-toggle {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+}
+.password-wrapper {
+    position: relative;
+}
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+.form-control + .form-control {
+    margin-top: 1rem;
+}
+.signal-strength {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin: 8px 0 16px;
+}
+.signal-bar {
+    width: 4px;
+    background-color: #28a745;
+    border-radius: 2px;
+}
+.signal-bar:nth-child(1) { height: 8px; }
+.signal-bar:nth-child(2) { height: 12px; }
+.signal-bar:nth-child(3) { height: 16px; }
+.signal-bar:nth-child(4) { height: 20px; }
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.footer-links a {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 0.75rem;
+}
+.footer-links a:hover {
+    color: #3ca2fa;
+    text-decoration: underline;
+}
+.terms-text {
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+.connection-status {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    min-height: 1.2rem;
+}
+@media (max-width: 576px) {
+    .card-body {
+        padding: 2rem 1rem;
+    }
+}

