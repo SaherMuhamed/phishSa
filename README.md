@@ -3,6 +3,8 @@
 ![Kali](https://img.shields.io/badge/Kali-268BEE?style=for-the-badge&logo=kalilinux&logoColor=white) 
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
 
+<a href="https://www.buymeacoffee.com/sahermohamed" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 ## 🔍 Overview
 > phishSa is an advanced dashboard for monitoring and managing WiFi penetration testing operations. It provides real-time visualization of connected clients, captured credentials, and attack analytics with an intuitive web interface.
 
